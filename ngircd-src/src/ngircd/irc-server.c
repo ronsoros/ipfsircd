@@ -74,7 +74,7 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
 
 		/* Get configuration index of new remote server ... */
 		for (i = 0; i < MAX_SERVERS; i++)
-			if (strcasecmp(Req->argv[0], Conf_Server[i].name) == 0)
+			if (MatchCaseInsensitive(Req->argv[0], Conf_Server[i].name) == 0)
 				break;
 
 		/* Make sure the remote server is configured here */
