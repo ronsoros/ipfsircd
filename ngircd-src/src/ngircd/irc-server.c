@@ -99,12 +99,12 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
 		}
 
 		/* Is there a registered server with this ID? */
-		if (!Client_CheckID(Client, Req->argv[0]))
-			return DISCONNECTED;
+		//if (!Client_CheckID(Client, Req->argv[0]))
+		//	return DISCONNECTED;
 
 		/* Mark this connection as belonging to an configured server */
-		if (!Conf_SetServer(i, Client_Conn(Client)))
-			return DISCONNECTED;
+		/*if (!Conf_SetServer(i, Client_Conn(Client)))
+			return DISCONNECTED;*/
 
 		Client_SetID( Client, Req->argv[0] );
 		Client_SetHops( Client, 1 );
@@ -183,8 +183,8 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
 						  Client_ID(Client), Req->command);
 
 		/* check for existing server with same ID */
-		if (!Client_CheckID(Client, Req->argv[0]))
-			return DISCONNECTED;
+		//if (!Client_CheckID(Client, Req->argv[0]))
+		//	return DISCONNECTED;
 
 		from = Client_Search( Req->prefix );
 		if (! from) {

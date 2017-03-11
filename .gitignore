@@ -1,5 +1,6 @@
 *.a
 *.o
+run/*
 doc/sample-ngircd.conf
 doc/src/html
 man/ngircd.8

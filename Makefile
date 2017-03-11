@@ -37,20 +37,29 @@ get-ipfs:
 config:
 	@./ngircd-eval "./configure --prefix=$(PREFIX) --with-openssl --enable-ipv6"
 
-all:
+all: config
 	@./ngircd-eval "make -j4 all"
 
 install:
 	mkdir -p $(PREFIX)
 	@./ngircd-eval "make install"
-	cp -r ipfs-backend $(PREFIX)/ipfs-helper
-	cp ipfs $(PREFIX)/ipfs-helper
+	mkdir -p $(PREFIX)/ipfs-helper
+	cp -r ipfs-backend/* $(PREFIX)/ipfs-helper
+	-cp ipfs $(PREFIX)/ipfs-helper
+	-ln -s $(PREFIX)/etc $(PREFIX)/etc/ssl
 
 start-all: start start-ipfs
+daemonize: daemonize.c
+	mkdir -p $(PREFIX)
+	$(CC) daemonize.c -o $(PREFIX)/daemonize
 
-start:
+start: daemonize
 	$(PREFIX)/sbin/ngircd
-	
+	$(PREFIX)/daemonize "lua $(PREFIX)/ipfs-helper/backend.lua"
 
-ipfs:
-	$(PREFIX)/ipfs-helper daemon --enable-pubsub-experiment
+ipfs: daemonize
+	$(PREFIX)/daemonize "$(PREFIX)/ipfs-helper/ipfs daemon --enable-pubsub-experiment"
+
+genssl:
+	openssl dhparam -dsaparam -out $(PREFIX)/etc/dhparam.pem 2048
+	openssl req -x509 -newkey rsa:4096 -keyout $(PREFIX)/etc/server.key -out $(PREFIX)/etc/server.crt -days 3650 -nodes
