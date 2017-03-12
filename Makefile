@@ -35,6 +35,7 @@ get-ipfs:
 	./ipfs init
 
 config:
+	@./ngircd-eval "./autogen.sh"
 	@./ngircd-eval "./configure --prefix=$(PREFIX) --with-openssl --enable-ipv6"
 
 all: config
