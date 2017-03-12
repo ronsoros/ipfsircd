@@ -1,3 +1,4 @@
+math.randomseed(os.time())
 socket = require("socket")
 url = require("socket.url")
 mime = require("mime")
@@ -9,9 +10,11 @@ ngircd = socket.tcp()
 ngircd:connect('127.0.0.1', ircd_port)
 ngircd:settimeout(0)
 function ircd_out(...)
+	print("send", string.format(...))
 	ngircd:send(string.format(...) .. "\r\n")
 end
 function ircd_in(data)
+print("recv", data)
 splitted = data:split(" ")
 if ( splitted[2] == "PING" ) then
 	ircd_out(":ipfs-relay.local PONG %s", splitted[3])
@@ -25,8 +28,17 @@ if ( splitted[2] == "PASS" ) then
 	return
 end
 if ( splitted[2] == "SERVER" ) then
-	s2s_out("%s :ipfs-relay.local SERVER %s 2 %d :%s", mytok, splitted[3], os.time(), data:match(".- :(.*)"))
-	s2s_out("%s REBURST", mytok)
+mename = splitted[3]
+meinfo = data:match(".- :(.*)")
+s2s_out("%s :ipfs-relay.local SERVER %s 2 %d :%s", mytok, splitted[3], os.time(), data:match(".- :(.*)"))
+	print(627);s2s_out("%s REBURST", mytok)
+ipfs:settimeout(5)
+str = "TGT"
+while str:find("TGT") do
+str=ipfs:receive("*l");
+ipfsin=str;abcd()
+end
+ipfs:settimeout(0)
 	return
 end
 s2s_out("%s %s", mytok, data)
@@ -35,30 +47,35 @@ function s2s_out(...)
         http.request("http://127.0.0.1:" .. tostring(ipfs_port) .. "/api/v0/pubsub/pub?arg=ipfschat&arg=" .. url.escape(string.format(...)))
 end
 function s2s_in(data)
+if data:find(" PING ") then return end
 	spl = data:split(" ")
+	if ( data:find(" PING ") ) then return end
 	if ( #spl >= 1 and spl[1] == mytok ) then
 		return
 	end
-	if ( #spl >= 2 and spl[2] == "REBURST" ) then
+	if ( #spl == 2 and spl[2] == "REBURST" ) then
 		ngircd:settimeout(1)
 		ircdin = ""
+		s2s_out("TGT %s :ipfs-relay.local SERVER %s 2 %d :%s",spl[1],mename,math.random(1,6555),meinfo)
 		ircd_out(":ipfs-relay.local 376 * :End of MOTD Reply (Fake Reburst)")
 		while not ircdin:find(" PING ") do
 		ircdin = ngircd:receive('*l')
-		if ircdin then
+		if ircdin and not ircdin:find("SERVER "..mename) and not ircdin:find("SERVER ipfs-relay.local") then
 		s2s_out("TGT %s %s", spl[1], ircdin)
 		end
 		if not ircdin then ircdin = "" end
 		end
 		ngircd:settimeout(0)
+		return
 	end
 	if ( #spl >= 3 and spl[1] == "TGT" ) then
 		if ( spl[2] == mytok ) then
+print("inc",data:match("TGT .- (.*)"))
 			ircd_out("%s", data:match("TGT .- (.*)"))
 		end
 		return
 	end
-	if ( #spl >= 2 and spl[3] == "ERROR" ) then
+	if ( data:find(" ERROR ") and not data:find("Prefix") ) then
 		ircd_out(":ipfs-relay.local SQUIT %s :The server tried to give me an ERROR.", spl[2]:gsub(":",""))
 		return
 	end
@@ -90,23 +107,28 @@ end
 ipfs:settimeout(0)
 ircd_out("PASS pass 0210-IRC+ ngircd|24.0:Xo")
 ircd_out("SERVER ipfs-relay.local 1 :IPFS Relay Server")
+                        abcd = function() data = ipfsin:match(".*\"data\":(%b\"\").*")
+                        if data then
+                        data = mime.unb64(data:sub(2, -2))
+                        print(data)
+			s2s_in(data)
+                        end end
 while true do
         ipfsin = ipfs:receive('*l')
         if ipfsin then
                 if ( ipfsin ~= "{}" and ipfsin ~= "3" ) then
 --                      print(ipfsin)
-                        data = ipfsin:match(".*\"data\":(%b\"\").*")
-                        if data then
-                        data = mime.unb64(data:sub(2, -2))
-                        print(data)
-			s2s_in(data)
-                        end
+	abcd(ipfsin)
                 end
         end
-	ircdin = ngircd:receive('*l')
+	ircdin, misc = ngircd:receive('*l')
 	if ircdin then
 		print(ircdin)
 		ircd_in(ircdin)
+	end
+	if not ircdin and misc:find("closed") then
+		print("panic:", "connection closed")
+		os.exit(1)
 	end
         socket.sleep(0.01)
 end
