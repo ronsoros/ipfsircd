@@ -22,6 +22,12 @@ Setup:
 	Compile IRCd and get IPFS and then generate SSL certs:
 	make get-ipfs all install genssl
 
+	Then edit your config file, in $(PREFIX)/etc/ngircd.conf
+	The default is `$(PREFIX)'
+
+	Your server is now automatically ready.
+	Just run `make start'
+
 	For more info, see 'make help'
 --------------------------------------------
 NgIRCd is under the a General Public License, version 2 as published
