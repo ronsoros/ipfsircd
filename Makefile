@@ -28,7 +28,7 @@ get-ipfs:
 	@echo "Getting IPFS for Linux"
 	@echo "Using another platform? Download ipfs manually"
 	@echo "Linux32 IPFS Static Binary:"
-	wget https://dist.ipfs.io/go-ipfs/v0.4.6/go-ipfs_v0.4.6_linux-386.tar.gz -O/tmp/ipfs.tar.gz
+	wget -4 https://dist.ipfs.io/go-ipfs/v0.4.6/go-ipfs_v0.4.6_linux-386.tar.gz -O/tmp/ipfs.tar.gz
 	tar xzf /tmp/ipfs.tar.gz
 	mv go-ipfs/ipfs .
 	chmod +x ipfs
