@@ -2,6 +2,7 @@ IPFSIRCd 2.0
 
 
 Requirements:
+	GNU configure generation utilities (autoconf/automake)
 	OpenSSL
 	Lua 5.1+
 	LuaSocket
@@ -13,6 +14,7 @@ How to get requirements:
 		Lua5.1: apt-get install lua5.1
 		LuaSocket: apt-get install lua-socket
 		GCC: apt-get install gcc g++ make glibc-dev
+		GNU/Auto*: apt-get install automake autoconf
 	Other Linux/Unix/BSD:
 		I've no idea -- if you're setting this up
 		you should know how.
@@ -23,15 +25,25 @@ Setup:
 	make get-ipfs all install genssl
 
 	Then edit your config file, in $(PREFIX)/etc/ngircd.conf
-	The default is `$(PREFIX)'
+	The default is `$PWD/run'
 
 	Your server is now automatically ready.
 	Just run `make start'
 
 	For more info, see 'make help'
+
+Debug:
 --------------------------------------------
-NgIRCd is under the a General Public License, version 2 as published
-by the FSF.
+IPFS Wont Start:
+	Make sure nothing is using ports 5001 and 8080
+
+NGIRCD Wont Start:
+	Make sure you ran `make genssl' and the certificates are in
+	place.
+
+--------------------------------------------
+NgIRCd is under a General Public License, version 2 of the
+standard one as published by the FSF.
 
 IPFSIRCd's ipfs-backend is under the Ronsor Public License 4.0
 See ipfs-backend/LICENSE
