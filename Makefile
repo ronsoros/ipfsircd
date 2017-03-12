@@ -57,7 +57,7 @@ start: daemonize
 	$(PREFIX)/sbin/ngircd
 	$(PREFIX)/daemonize "lua $(PREFIX)/ipfs-helper/backend.lua"
 
-ipfs: daemonize
+start-ipfs: daemonize
 	$(PREFIX)/daemonize "$(PREFIX)/ipfs-helper/ipfs daemon --enable-pubsub-experiment"
 
 genssl:
