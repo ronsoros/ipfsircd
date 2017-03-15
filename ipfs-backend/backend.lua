@@ -98,7 +98,7 @@ end
 end
 ipfs = socket.tcp()
 ipfs:connect('127.0.0.1', ipfs_port)
-ipfs:send("GET /api/v0/pubsub/sub?arg=ipfschat&discover=true HTTP/1.1\r\nHost: localhost\r\nUser-Agent: ipfschat/ircd 1.0.0 Mozilla/0.0 (NotHTML, Unlike Gecko)\r\n\r\n")
+ipfs:send("GET /api/v0/pubsub/sub?arg=ipfschat&discover=true HTTP/1.1\r\nHost: localhost\r\nUser-Agent: ipfschat/ircd 1.0.1 Mozilla/0.0 (Lua NT, 5.1) LuaNotWebKit/500.0.0 (NotHTML, Unlike Gecko) Silver/57.0.0 Quest/500.0\r\n\r\n")
 str = "yes"
 while str ~= "" do
         str = ipfs:receive('*l')
@@ -127,8 +127,8 @@ while true do
 		ircd_in(ircdin)
 	end
 	if not ircdin and misc:find("closed") then
+		s2s_out(":ipfs-relay.local SQUIT %s :Connection Closed", mename);
 		print("panic:", "connection closed")
-		os.exit(1)
 	end
         socket.sleep(0.01)
 end

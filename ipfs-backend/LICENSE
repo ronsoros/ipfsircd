@@ -1,4 +1,4 @@
-OpenStar/Ronsor Public License 4.0
+RONSOR OPENSTAR PUBLIC LICNSE 4.0
 (C) 2017 Ronsor-OpenStar
 
 In this document, you will be the Receiver of the software, and Ronsor-OpenStar
@@ -17,9 +17,14 @@ in any documentation or manuals:
 4. Any modifications to this software by the Receiver may be covered by a license of the Receiver's choice, whether
 this one or any other license.
 
+5. This license is only explicitly compatible with GPLv2 and LGPL, AGPL and GPLv3 projects may not use this code
+
 *** NO WARRANTY ***
 Ronsor-OpenStar, neither any Receivers of this software who have made contributions shall be held liable
 for any results of using this software whether intended or not. If your jurisdiction does not allow
 disclaiming of warranty to this extent then it is known that you are violating the LICENSE.
 
-Warning: this license is not GPL compatible.
+COPYRIGHT 2014, 2015 RONSOR IRC
+COPYRIGHT 2015, 2016, 2017 OPENSTAR IRC
+COPYRIGHT 2017 RONSOR-OPENSTAR
+THIS CODE IS OWNED BY THE CONTRIBUTORS OF IPFSIRCD.
