@@ -10,6 +10,9 @@ help:
 	@echo " start-ipfs Start IPFS"
 	@echo " config   : Run the Next Generation(R) IRCd Server Script"
 	@echo " genssl   : SSL is required by the IRCd (and OpenSSL)"
+	@echo "FreeBSD Specific Commands"
+	@echo " get-ipfs-freebsd : Get FreeBSD IPFS Binary"
+	@echo "------------------------"
 	@echo " Sample   : make all install genssl"
 	@echo " Info     : The sample command will do what most people want"
 	@echo "Makefile-Manual Pages:"
@@ -24,6 +27,16 @@ man-readme:
 
 man-notfound:
 	@echo "No such manual page."
+get-ipfs-freebsd:
+	@echo "Getting IPFS for FreeBSD"
+	@echo "Using Linux? make get-ipfs"
+	@echo "FreeBSD amd64 IPFS Binary:"
+	wget -4 https://dist.ipfs.io/go-ipfs/v0.4.6/go-ipfs_v0.4.6_freebsd-amd64.tar.gz -O/tmp/ipfs.tar.gz
+	tar xzf /tmp/ipfs.tar.gz
+	mv go-ipfs/ipfs .
+	chmod +x ipfs
+	./ipfs init
+
 get-ipfs:
 	@echo "Getting IPFS for Linux"
 	@echo "Using another platform? Download ipfs manually"
